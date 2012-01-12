@@ -352,6 +352,7 @@ class ezcPersistentDeleteHandler extends ezcPersistentSessionHandler
             // @todo: Is this correct? Or do we need to cascade reverse here?
             if ( isset( $relation->reverse ) && $relation->reverse === true )
             {
+                return;
                 throw new ezcPersistentRelationOperationNotSupported(
                     $class,
                     $relatedClass,
