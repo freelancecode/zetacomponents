@@ -51,12 +51,7 @@ class ezcPersistentLoadHandler extends ezcPersistentSessionHandler
      */
     public function load( $class, $id )
     {
-        $def    = $this->definitionManager->fetchDefinition( $class );
-        $object = new $def->class;
-
-        $this->loadIntoObject( $object, $id );
-
-        return $object;
+        return $this->loadIntoObject( $class, $id );
     }
 
     /**
@@ -104,9 +99,14 @@ class ezcPersistentLoadHandler extends ezcPersistentSessionHandler
      */
     public function loadIntoObject( $object, $id )
     {
-        $def = $this->definitionManager->fetchDefinition(
-            get_class( $object ) 
-        );
+        if( ! is_object( $object ) )
+        {
+            $class = $object;
+            
+            $def = $this->definitionManager->fetchDefinition( $class );
+            $object = new $def->class;
+        }
+        else $def = $this->definitionManager->fetchDefinition( get_class( $object ) );
 
         // Prepare query.
         $q = $this->database->createSelectQuery();
